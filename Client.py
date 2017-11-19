@@ -9,11 +9,11 @@ print ('Connected to', host)
 
 while True:
     #z = input("Enter something for the server: ")
-    msg = input()
+    msg = input('> ')
     sock.sendall(msg.encode('utf-8'))
     # Halts
     returnMsg = (sock.recv(1024)).decode('utf-8')
-    print (returnMsg)
+    print ('> ' + returnMsg)
 
     if msg == ':q':
         break

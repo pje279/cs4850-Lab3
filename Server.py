@@ -22,10 +22,11 @@ while True:
     ### End if conn is None:
     else:
         # Halts
-        #print ('[Waiting for response...]')
         msg = (conn.recv(1024)).decode('utf-8')
 
         if msg == ':q':
+            print('Shutting down.')
+
             conn.sendall(b'Shutting down server.')
             conn.close()
 
@@ -35,10 +36,10 @@ while True:
         ### End if msg == ':q':
         else:
             cmd = msg.split()
-            #print(len(cmd))
+            
             if len(cmd) == 3 and cmd[0] == 'login':
                 if currUser != '':
-                    response = 'User ' + currUser + 'is already logged in. Please logout first if you wish to login as a differnt user.'
+                    response = 'User ' + currUser + ' is already logged in. Please logout first if you wish to login as a differnt user.'
                     conn.sendall(response.encode('utf-8'))
                 ### End if currUser != '':
                 else:
@@ -47,6 +48,8 @@ while True:
                             response = 'Server: ' + user['UserID'] + ' joins.'
                             currUser = user['UserID']
                             conn.sendall(response.encode('utf-8'))
+
+                            print(currUser + ' login.')
                             break
                         ### End if user['UserID'] == cmd[1] and user['Password'] == cmd[2]:
                     ### End for user in users:
@@ -88,6 +91,8 @@ while True:
                     msg = ' '.join(cmd)
                     msg = currUser + ': ' + msg
                     conn.sendall(msg.encode('utf-8'))
+
+                    print(msg)
                 ### End else:
             ### End elif cmd[0] == 'send':
             elif len(cmd) > 0 and cmd[0] == 'logout':
@@ -95,6 +100,8 @@ while True:
                     conn.sendall(b'No user is currently logged in.')
                 ### End if currUser == '':
                 else:
+                    print(currUser + ' logout.')
+
                     response = 'Server: ' + currUser + ' left.'
                     conn.sendall(response.encode('utf-8'))
                     currUser = ''
@@ -106,7 +113,7 @@ while True:
             ### End else:
         ### End else:
         #msg = c.recvfrom(msg.decode('utf-8'))
-        print (msg)
+        #print (msg)
         #msg = input("Enter something to this client: ")
         #conn.sendall(msg.encode('utf-8'))
     ### End else:
